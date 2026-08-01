@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Summer Meeting 2026 — ApulianChain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- QR Code library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --bg:#070b16;--bg2:#0b1120;--panel:#111a2e;--panel-2:#16223c;--line:#22324f;
+    --cyan:#2dd4ff;--blue:#3b6bff;--green:#39e08a;--red:#ff4d6d;--amber:#ffb84d;
+    --purple:#a78bfa;--orange:#fb923c;--gold:#f59e0b;
+    --text:#e9eefb;--muted:#8794b3;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --mono:'Space Mono',monospace;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--body);
+    background:
+      radial-gradient(1200px 600px at 80% -10%,rgba(59,107,255,.18),transparent 60%),
+      radial-gradient(900px 500px at -10% 110%,rgba(45,212,255,.14),transparent 55%),
+      var(--bg);
+    color:var(--text);min-height:100dvh;display:flex;align-items:center;
+    justify-content:center;padding:16px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(circle at 50% 40%,#000 0%,transparent 75%);
+    pointer-events:none;z-index:0;
+  }
+  .app{
+    position:relative;z-index:1;width:100%;max-width:840px;
+    background:linear-gradient(180deg,rgba(22,34,60,.88),rgba(17,26,46,.94));
+    border:1px solid var(--line);border-radius:20px;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.04);
+    overflow:hidden;backdrop-filter:blur(8px);
+  }
+
+  /* ── TITLEBAR ── */
+  .bar{display:flex;align-items:center;gap:10px;padding:13px 20px;
+    border-bottom:1px solid var(--line);background:rgba(7,11,22,.6)}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+  .bar-title{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:4px}
+  .bar-title b{color:var(--cyan)}
+  .bar-right{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+  .wrap{padding:28px 26px 26px}
+
+  /* ── TYPOGRAPHY ── */
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;
+    text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+  h1{font-family:var(--display);font-weight:700;
+    font-size:clamp(22px,5vw,38px);line-height:1.05;letter-spacing:-.5px;margin-bottom:4px}
+  h1 .g1{background:linear-gradient(90deg,#fff,var(--cyan));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  h1 .g2{background:linear-gradient(90deg,var(--cyan),var(--purple));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .tagline{color:var(--muted);font-size:14.5px;margin:8px 0 20px;max-width:56ch;line-height:1.6}
+
+  /* ── NICKNAME FORM ── */
+  .nick-form{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+  .nick-input{flex:1;min-width:180px;padding:12px 16px;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    color:var(--text);font-family:var(--display);font-size:15px;outline:none;
+    transition:border-color .2s}
+  .nick-input:focus{border-color:var(--cyan)}
+  .nick-input::placeholder{color:var(--muted)}
+
+  /* ── BUTTONS ── */
+  .btn{appearance:none;cursor:pointer;font-family:var(--display);font-weight:600;
+    font-size:15px;border:none;border-radius:12px;padding:12px 22px;
+    display:inline-flex;align-items:center;gap:8px;transition:transform .12s,filter .12s}
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+  .btn-primary{color:#06111f;background:linear-gradient(90deg,var(--cyan),var(--blue));
+    box-shadow:0 12px 28px -10px rgba(45,212,255,.5)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none}
+  .btn-gold{color:#06111f;background:linear-gradient(90deg,var(--gold),var(--amber));
+    box-shadow:0 12px 28px -10px rgba(245,158,11,.5)}
+  .btn-sm{font-size:13px;padding:9px 16px}
+  .btn:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+  /* ── TOPIC GRID ── */
+  .topics{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:6px}
+  .topic{text-align:left;cursor:pointer;color:var(--text);background:var(--panel);
+    border:1px solid var(--line);border-radius:15px;padding:16px;
+    transition:border-color .15s,transform .12s,background .15s;
+    display:flex;flex-direction:column;gap:5px;position:relative;overflow:hidden}
+  .topic:hover{transform:translateY(-3px);background:var(--panel-2)}
+  .topic .t-badge{position:absolute;top:11px;right:11px;
+    font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:99px}
+  .topic .t-ic{font-size:22px;margin-bottom:2px}
+  .topic .t-name{font-family:var(--display);font-weight:600;font-size:14.5px;line-height:1.25}
+  .topic .t-speaker{font-size:11px;color:var(--muted);margin-top:1px}
+  .topic .t-go{font-family:var(--mono);font-size:10px;margin-top:5px}
+  .topic .t-done{font-family:var(--mono);font-size:10px;margin-top:5px}
+
+  /* tema colori per topic */
+  .tc1{border-color:rgba(45,212,255,.25)}.tc1:hover{border-color:var(--cyan)}.tc1 .t-go{color:var(--cyan)}.tc1 .t-badge{background:rgba(45,212,255,.1);color:var(--cyan);border:1px solid rgba(45,212,255,.3)}
+  .tc2{border-color:rgba(59,107,255,.25)}.tc2:hover{border-color:var(--blue)}.tc2 .t-go{color:#7a9eff}.tc2 .t-badge{background:rgba(59,107,255,.1);color:#7a9eff;border:1px solid rgba(59,107,255,.3)}
+  .tc3{border-color:rgba(255,77,109,.25)}.tc3:hover{border-color:var(--red)}.tc3 .t-go{color:var(--red)}.tc3 .t-badge{background:rgba(255,77,109,.1);color:#ff8ba0;border:1px solid rgba(255,77,109,.3)}
+  .tc4{border-color:rgba(255,184,77,.25)}.tc4:hover{border-color:var(--amber)}.tc4 .t-go{color:var(--amber)}.tc4 .t-badge{background:rgba(255,184,77,.1);color:var(--amber);border:1px solid rgba(255,184,77,.3)}
+  .tc5{border-color:rgba(57,224,138,.25)}.tc5:hover{border-color:var(--green)}.tc5 .t-go{color:var(--green)}.tc5 .t-badge{background:rgba(57,224,138,.1);color:var(--green);border:1px solid rgba(57,224,138,.3)}
+  .tc6{border-color:rgba(167,139,250,.25)}.tc6:hover{border-color:var(--purple)}.tc6 .t-go{color:var(--purple)}.tc6 .t-badge{background:rgba(167,139,250,.1);color:var(--purple);border:1px solid rgba(167,139,250,.3)}
+
+  /* ── PROGRESS ── */
+  .progress{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .track{flex:1;height:7px;border-radius:99px;background:var(--bg2);
+    overflow:hidden;border:1px solid var(--line)}
+  .fill{height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width .4s ease}
+  .count{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+  .count b{color:var(--text)}
+
+  /* ── QUESTION ── */
+  .qtag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);
+    font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+  .q{font-family:var(--display);font-weight:600;
+    font-size:clamp(17px,3vw,22px);line-height:1.3;margin-bottom:20px}
+
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;cursor:pointer;font-size:14.5px;color:var(--text);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;display:flex;gap:12px;align-items:flex-start;
+    transition:border-color .15s,background .15s;font-family:var(--body)}
+  .opt:hover:not(:disabled){border-color:var(--cyan);background:var(--panel-2)}
+  .opt .key{flex:none;width:25px;height:25px;border-radius:7px;font-family:var(--mono);
+    font-size:12px;font-weight:700;display:grid;place-items:center;
+    background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
+  .opt.correct{border-color:var(--green);background:rgba(57,224,138,.12)}
+  .opt.correct .key{background:var(--green);color:#04140b;border-color:var(--green)}
+  .opt.wrong{border-color:var(--red);background:rgba(255,77,109,.12)}
+  .opt.wrong .key{background:var(--red);color:#1a0309;border-color:var(--red)}
+  .opt:disabled{cursor:default}.opt.dim{opacity:.4}
+
+  .explain{margin-top:16px;border-radius:12px;padding:14px 16px;
+    border:1px solid var(--line);background:rgba(59,107,255,.07);
+    font-size:13.5px;color:var(--text);display:none;line-height:1.65}
+  .explain.show{display:block;animation:rise .3s ease}
+  .explain .head{font-family:var(--mono);font-size:11px;letter-spacing:1px;
+    text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+  .explain.ok .head{color:var(--green)}.explain.no .head{color:var(--red)}
+  .explain b{color:var(--cyan)}
+
+  .pts-flash{display:inline-block;font-family:var(--mono);font-size:13px;
+    color:var(--gold);border:1px solid var(--gold);border-radius:8px;
+    padding:4px 10px;margin-left:8px;animation:rise .3s ease}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;
+    margin-top:20px;gap:10px;flex-wrap:wrap}
+
+  /* ── SCOREBOARD ── */
+  .score-panel{padding:16px 18px;background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;margin-bottom:20px}
+  .score-panel .sp-title{font-family:var(--mono);font-size:11px;letter-spacing:2px;
+    text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .score-row{display:flex;align-items:center;gap:10px;padding:7px 0;
+    border-bottom:1px solid var(--line)}
+  .score-row:last-child{border-bottom:none}
+  .score-row .pos{font-family:var(--mono);font-size:14px;width:28px;text-align:center}
+  .score-row .sname{flex:1;font-family:var(--display);font-weight:600;font-size:14px}
+  .score-row .spts{font-family:var(--mono);font-size:13px;color:var(--gold);
+    font-weight:700}
+  .score-row.me{background:rgba(45,212,255,.06);border-radius:8px;padding:7px 10px;
+    margin:0 -10px}
+  .score-row.me .sname{color:var(--cyan)}
+  .gold-row .pos{color:var(--gold)}.silver-row .pos{color:#94a3b8}.bronze-row .pos{color:var(--amber)}
+
+  /* ── RESULT ── */
+  .result{text-align:center;padding:6px 0}
+  .score-ring{width:150px;height:150px;border-radius:50%;margin:10px auto 16px;
+    display:grid;place-items:center;position:relative;
+    background:conic-gradient(var(--cyan) var(--deg,0deg),var(--bg2) 0deg)}
+  .score-ring::after{content:"";position:absolute;inset:11px;border-radius:50%;
+    background:var(--panel);border:1px solid var(--line)}
+  .score-num{position:relative;z-index:1;font-family:var(--display);font-weight:700;font-size:34px}
+  .score-num span{font-size:16px;color:var(--muted)}
+  .rank{font-family:var(--display);font-weight:700;font-size:22px;margin-bottom:6px}
+  .lvl-hi{color:var(--green)}.lvl-mid{color:var(--cyan)}.lvl-lo{color:var(--amber)}
+  .result .sub{margin:6px auto 22px;max-width:48ch;color:var(--muted);font-size:14px}
+  .result .btn{margin:5px}
+
+  .topic-recap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 20px}
+  .tr-card{padding:9px 10px;border:1px solid var(--line);border-radius:9px;
+    background:var(--panel);text-align:center}
+  .tr-ic{font-size:16px;margin-bottom:3px}
+  .tr-score{font-family:var(--mono);font-size:12px;font-weight:700}
+  .tr-name{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.5px}
+  .tr-card.perfect .tr-score{color:var(--green)}
+  .tr-card.partial .tr-score{color:var(--amber)}
+  .tr-card.zero .tr-score{color:var(--red)}
+
+  /* ── GLOBAL LEADERBOARD ── */
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin:20px 0}
+  .podium-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .podium-medal{font-size:28px}
+  .podium-name{font-family:var(--display);font-weight:700;font-size:13px;
+    text-align:center;max-width:90px;word-break:break-all}
+  .podium-pts{font-family:var(--mono);font-size:12px;color:var(--gold)}
+  .podium-block{border-radius:8px 8px 0 0;display:flex;align-items:flex-end;
+    justify-content:center;padding:8px;font-family:var(--mono);font-size:11px;
+    color:rgba(255,255,255,.5)}
+  .p1-block{background:linear-gradient(180deg,rgba(245,158,11,.3),rgba(245,158,11,.1));
+    width:80px;height:90px;border:1px solid rgba(245,158,11,.4)}
+  .p2-block{background:linear-gradient(180deg,rgba(148,163,184,.3),rgba(148,163,184,.1));
+    width:70px;height:70px;border:1px solid rgba(148,163,184,.4)}
+  .p3-block{background:linear-gradient(180deg,rgba(251,146,60,.3),rgba(251,146,60,.1));
+    width:70px;height:55px;border:1px solid rgba(251,146,60,.4)}
+  .gadget-badge{display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:99px;
+    background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);color:var(--gold)}
+
+  /* ── QR PANEL ── */
+  .qr-panel{text-align:center;padding:24px}
+  .qr-panel h2{font-family:var(--display);font-weight:700;font-size:22px;margin-bottom:6px}
+  .qr-box{display:inline-block;background:#fff;padding:16px;border-radius:12px;
+    margin:16px auto;box-shadow:0 0 30px rgba(45,212,255,.2)}
+  #qrcode img{display:block}
+  .qr-url{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;word-break:break-all}
+
+  /* ── FOOTER ── */
+  .foot{border-top:1px solid var(--line);padding:12px 20px;
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  .foot b{color:var(--text)}.foot .spark{color:var(--green)}
+
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+  @media(max-width:540px){
+    .topics{grid-template-columns:1fr}
+    .topic-recap{grid-template-columns:1fr 1fr}
+    .wrap{padding:20px 14px 18px}
+    .podium{gap:6px}
+    .result .btn{width:100%;justify-content:center}
+    .nick-form{flex-direction:column}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <span class="bar-title"><b>ApulianChain</b> · Summer Meeting 2026</span>
+    <span class="bar-right" id="barRight">menu</span>
+  </div>
+  <div class="wrap" id="wrap"></div>
+  <div class="foot">
+    <span><b>ApulianChain</b> <span class="spark">APS</span> · Powered by DeGate</span>
+    <span>Sabato 1 Agosto 2026 · Ostuni (BR)</span>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   DATI — 6 SESSIONI CON RELATORI REALI
+   Fonte: locandina Summer Meeting 2026 ApulianChain
+   ===================================================================== */
+const TOPICS = [
+  {
+    id:'apulian', ic:'🏫', cls:'tc1',
+    name:'ApulianChain APS & Scuole',
+    speaker:'Alfredo HokenTech',
+    badge:'Sessione 1',
+    pts_per_q: 100,
+    questions:[
+      {q:"Qual è la missione principale di ApulianChain APS?",
+       opts:["Vendere criptovalute nelle scuole","Portare educazione finanziaria e Web3 direttamente nelle scuole italiane","Sviluppare exchange centralizzati","Offrire consulenza fiscale alle imprese"],
+       ok:1,why:"ApulianChain APS porta <b>educazione finanziaria e Web3</b> nelle scuole: blockchain, DeFi, cybersecurity — competenze reali per i ragazzi di oggi."},
+      {q:"Cosa si intende per 'bilancio delle esperienze' nelle scuole portato da ApulianChain?",
+       opts:["Il bilancio contabile dell'associazione","La valutazione dell'impatto formativo: studenti raggiunti, competenze acquisite, feedback ricevuto","Il numero di Bitcoin distribuiti","Il rendiconto fiscale annuale"],
+       ok:1,why:"Il bilancio delle esperienze misura l'<b>impatto reale</b> dei percorsi formativi: quanti studenti raggiunti, quali competenze acquisite, quale cambiamento generato nelle scuole."},
+      {q:"Perché ApulianChain lavora con i giovani nelle scuole?",
+       opts:["Per fare speculazione finanziaria","Perché le competenze digitali avanzate saranno fondamentali nel mercato del lavoro futuro","Perché è obbligatorio per legge","Per raccogliere fondi"],
+       ok:1,why:"Il futuro del lavoro richiede <b>blockchain, AI, DeFi e cybersecurity</b>. Formare i giovani oggi significa dargli un vantaggio competitivo reale e renderli protagonisti della transizione digitale."},
+      {q:"Cos'è un'APS (Associazione di Promozione Sociale)?",
+       opts:["Una società per azioni","Un'organizzazione no-profit che svolge attività di utilità sociale a favore dei propri associati e della comunità","Una banca centrale","Un fondo di investimento"],
+       ok:1,why:"Un'<b>APS</b> è un ente del Terzo Settore che opera senza scopo di lucro per promuovere attività culturali, educative e sociali. ApulianChain APS porta formazione Web3 nelle comunità."},
+    ]
+  },
+  {
+    id:'degate', ic:'🌐', cls:'tc2',
+    name:'DeGate & Ecosistema DeFi',
+    speaker:'Davide Pietrangelo — Officina DeFi & Linda',
+    badge:'Sessione 2',
+    pts_per_q: 120,
+    questions:[
+      {q:"Cos'è DeGate e quale problema risolve?",
+       opts:["Un wallet per custodire NFT","Un DEX Layer 2 con order book che combina sicurezza blockchain e velocità di un CEX","Una stablecoin algoritmica","Un protocollo di lending su Ethereum L1"],
+       ok:1,why:"<b>DeGate</b> è un DEX su Layer 2 basato su ZK-Rollup: alta velocità + bassi costi + sicurezza non-custodial. Risolve il trilemma degli exchange decentralizzati."},
+      {q:"Cosa significa 'non-custodial' in un DEX?",
+       opts:["L'exchange custodisce le tue chiavi","L'utente mantiene sempre il controllo delle proprie chiavi private — i fondi non passano mai nella piattaforma","Non si possono fare prelievi","I fondi sono bloccati 30 giorni"],
+       ok:1,why:"<b>Non-custodial</b>: le tue chiavi private restano sempre e solo in tuo possesso. Nessun exchange può bloccarti i fondi o essere hackerato portandosi i tuoi asset."},
+      {q:"Cosa sono i ZK-Rollup usati da DeGate?",
+       opts:["Un tipo di mining","Tecnologia che comprime migliaia di transazioni in una singola prova crittografica verificabile su L1, riducendo costi e aumentando velocità","Un protocollo di staking","Un algoritmo di trading"],
+       ok:1,why:"I <b>ZK-Rollup</b> raggruppano transazioni off-chain e generano una proof matematica verificata su Ethereum. Risultato: costi minimi, alta velocità, sicurezza di L1."},
+      {q:"Cos'è un Order Book decentralizzato?",
+       opts:["Un registro cartaceo degli ordini","Un sistema che replica la struttura degli exchange tradizionali (ordini limit e market) senza intermediari centralizzati","Un algoritmo di mining","Un tipo di stablecoin"],
+       ok:1,why:"L'<b>Order Book decentralizzato</b> porta precisione da exchange tradizionale nel mondo DeFi: ordini limit, market, stop — senza AMM, ideale per trader professionali."},
+    ]
+  },
+  {
+    id:'cyber', ic:'🔒', cls:'tc3',
+    name:'Cybersecurity: Sfide Attuali',
+    speaker:'Antonio Petruzzelli & Vincenzo Papagna',
+    badge:'Sessione 3',
+    pts_per_q: 110,
+    questions:[
+      {q:"Qual è la minaccia n.1 per chi detiene asset crypto?",
+       opts:["Il surriscaldamento del processore","Il phishing: email e siti fake che imitano wallet ed exchange per rubare seed phrase e chiavi private","La volatilità del prezzo","L'aggiornamento del firmware"],
+       ok:1,why:"Il <b>phishing crypto</b> è la minaccia n.1. Regola d'oro: nessun servizio legittimo chiederà MAI le tue 12/24 parole del seed phrase."},
+      {q:"Cosa rende devastante un attacco di Seed Phrase Phishing?",
+       opts:["Rallenta le transazioni temporaneamente","Chi ottiene le 12/24 parole del seed ottiene accesso completo e irrevocabile all'intero wallet, senza possibilità di recupero","Blocca l'account per 24 ore","Richiede collaborazione della banca"],
+       ok:1,why:"Il <b>seed phrase</b> è la chiave master: con quelle parole si svuota il wallet su qualsiasi device. Non c'è 2FA, non c'è supporto, non c'è recupero. Va conservato offline, fisicamente."},
+      {q:"Quale strumento offre il massimo livello di sicurezza per crypto a lungo termine?",
+       opts:["Lasciare i fondi sull'exchange","Un'app mobile con PIN","Un hardware wallet (Ledger, Trezor): firma le transazioni offline, la chiave non tocca mai internet","Un documento Word con le password"],
+       ok:2,why:"L'<b>hardware wallet</b> è il gold standard: la chiave privata viene generata e rimane nel dispositivo fisico, offline. Anche collegandolo a un PC infetto, la firma avviene internamente."},
+      {q:"In un attacco SQL Injection, quale payload bypassa un login vulnerabile?",
+       opts:["https://","404 NOT FOUND","' OR 1=1 --","Ctrl + Alt + Canc"],
+       ok:2,why:"<b>' OR 1=1 --</b> inganna il database rendendo la condizione sempre vera, bypassando l'autenticazione. Si previene con Prepared Statements e validazione dell'input."},
+    ]
+  },
+  {
+    id:'hyper', ic:'📊', cls:'tc4',
+    name:'Hyperliquid & Polymarket',
+    speaker:'Marco Virtual Architects & Alessio CryptoEater',
+    badge:'Sessione 4',
+    pts_per_q: 130,
+    questions:[
+      {q:"Cos'è Hyperliquid?",
+       opts:["Un exchange centralizzato regolamentato","Un DEX perp on-chain con il proprio Layer 1 (HyperEVM) che offre trading perpetuo con order book e latenze da CEX, completamente decentralizzato","Un protocollo di staking su Solana","Una stablecoin algoritmica"],
+       ok:1,why:"<b>Hyperliquid</b> ha costruito il proprio Layer 1 ottimizzato per il trading: order book on-chain, futures perpetui, latenza sub-secondo. Oltre $1 miliardo di volume giornaliero."},
+      {q:"Cosa sono i 'futures perpetui' (perp)?",
+       opts:["Contratti che scadono ogni lunedì","Derivati che permettono leva su un asset senza scadenza, con un 'funding rate' che bilancia posizioni long e short","Obbligazioni governative tokenizzate","Token che generano rendite passive"],
+       ok:1,why:"I <b>perpetual futures</b> sono contratti senza scadenza. Il <b>funding rate</b> mantiene il prezzo del perp allineato allo spot. Permettono leva anche fino a 50x."},
+      {q:"Cos'è Polymarket?",
+       opts:["Un exchange di NFT","Una piattaforma dove gli utenti tradano con USDC sull'esito di eventi reali: il prezzo riflette la probabilità implicita del mercato","Un protocollo di lending","Un DEX specializzato in stablecoin"],
+       ok:1,why:"<b>Polymarket</b> è il principale prediction market decentralizzato: quote su eventi reali in USDC. Una quota a 0,70$ = 70% di probabilità stimata dal mercato. Usato da hedge fund come segnale predittivo."},
+      {q:"Qual è il rischio principale del trading con leva su DEX?",
+       opts:["Ricevere troppi profitti","La liquidazione: se il mercato va contro la posizione oltre soglia, il collaterale viene liquidato automaticamente","Il gas fee troppo basso","La lentezza delle transazioni"],
+       ok:1,why:"La <b>liquidazione</b> è il rischio chiave: con 10x leva, un -10% azzera il collaterale. Regola d'oro: stop-loss precisi e sizing corretto del capitale rischiato."},
+    ]
+  },
+  {
+    id:'defi', ic:'📈', cls:'tc5',
+    name:'DeFi nel 2026 — Team1 Builder Hub',
+    speaker:'Alessio CryptoPub & Jack — Team Avalanche',
+    badge:'Sessione 5',
+    pts_per_q: 120,
+    questions:[
+      {q:"Quale normativa ha avuto il maggiore impatto sulla DeFi nel 2025-2026?",
+       opts:["Il GDPR del 2018","Il regolamento MiCA: requisiti di licenza, trasparenza e protezione utenti per emittenti crypto e prestatori di servizi nell'UE","Il Trattato di Lisbona","La Direttiva IPPC"],
+       ok:1,why:"<b>MiCA</b> (entrato in vigore 2024-2025) è il framework crypto più completo al mondo: licenze, whitepaper, riserve per stablecoin. Sta ridisegnando l'industria crypto europea."},
+      {q:"Cosa si intende per TVL (Total Value Locked)?",
+       opts:["Il valore totale delle tasse pagate ai miner","La somma di asset depositati nei protocolli DeFi: misura la fiducia del mercato e la liquidità disponibile","Il numero di wallet attivi","Il prezzo medio del gas fee"],
+       ok:1,why:"Il <b>TVL</b> è il termometro della DeFi: più alto è, più liquidità e fiducia ci sono. Nel 2024-2025 ha superato $100 miliardi. Monitorabile su DeFiLlama."},
+      {q:"Quale trend guida l'adozione istituzionale della DeFi nel 2026?",
+       opts:["La recessione globale","La tokenizzazione degli asset reali (RWA): bond, immobili e fondi tradizionali portati on-chain, aprendo la DeFi agli investitori istituzionali","L'aumento dei tassi Fed","La fine degli smart contract"],
+       ok:1,why:"La <b>tokenizzazione RWA</b> è il trend istituzionale più importante: BlackRock, Franklin Templeton portano miliardi on-chain, creando il ponte tra finanza tradizionale e DeFi."},
+      {q:"Cos'è Team1 Builder Hub?",
+       opts:["Un exchange centralizzato","Un hub per builder e sviluppatori Web3 che supporta la crescita di startup e progetti nell'ecosistema blockchain","Un protocollo DeFi di lending","Un wallet hardware"],
+       ok:1,why:"<b>Team1 Builder Hub</b> è l'ecosistema per chi costruisce nel Web3: supporto a startup, builder e progetti blockchain — uno dei partner chiave del Summer Meeting ApulianChain 2026."},
+    ]
+  },
+  {
+    id:'ai', ic:'🤖', cls:'tc6',
+    name:'Startup & Automazione IA',
+    speaker:'Mario Mastrulli',
+    badge:'Sessione 6',
+    pts_per_q: 140,
+    questions:[
+      {q:"Come sta cambiando l'IA il modello delle startup digitali nel 2026?",
+       opts:["Le startup usano l'IA solo per il marketing","L'IA permette a team piccoli di automatizzare funzioni intere (customer service, sviluppo, analisi) riducendo i costi operativi fino all'80%","L'IA sostituisce i founder ma non i dipendenti","L'IA è utile solo per le grandi aziende"],
+       ok:1,why:"Le <b>startup AI-native</b> del 2026 operano con 2-5 persone raggiungendo scale che prima richiedevano 50+. Agenti AI autonomi, LLM e automazioni no-code azzerano interi reparti."},
+      {q:"Cos'è un 'agente AI'?",
+       opts:["Un chatbot che risponde alle FAQ","Un sistema AI autonomo che percepisce il contesto, pianifica azioni multi-step e le esegue in autonomia per raggiungere un obiettivo","Un software antivirus evoluto","Un algoritmo di trading ad alta frequenza"],
+       ok:1,why:"Gli <b>agenti AI</b> non si limitano a rispondere: pianificano, usano tool, navigano il web, scrivono codice, gestiscono email. Completano workflow complessi in autonomia in minuti."},
+      {q:"In che modo l'IA trasforma la compliance finanziaria?",
+       opts:["Non ha applicazioni in questo settore","L'IA analizza in real-time milioni di transazioni per rilevare frodi e rischi AML con precisione superiore, riducendo costi di compliance","La compliance IA è illegale nell'UE","Solo le banche centrali possono usarla"],
+       ok:1,why:"L'<b>IA applicata alla compliance</b> rivoluziona il settore: ML per frodi in real-time, NLP per contratti e normative, agenti per KYC/AML automatizzato. Più accurata, veloce e meno costosa."},
+      {q:"Qual è il rischio principale nell'adottare AI senza strategia?",
+       opts:["L'IA consuma troppa batteria","Dipendenza da tool non verificati, allucinazioni in decisioni critiche, rischi GDPR e lock-in su piattaforme closed-source","I clienti non capiscono i prodotti AI","L'IA funziona sempre perfettamente"],
+       ok:1,why:"I rischi reali: <b>allucinazioni</b> in contesti critici, <b>violazioni GDPR</b> con API esterne, <b>vendor lock-in</b> su piattaforme proprietarie. L'AI va adottata con governance chiara e validazione umana."},
+    ]
+  },
+];
+
+/* =====================================================================
+   STATO GLOBALE
+   ===================================================================== */
+let nickname    = '';
+let currentT    = null;
+let qIdx        = 0;
+let sessionPts  = 0;
+let answered    = false;
+let topicDone   = {};
+
+// ── SUPABASE CONFIG ──────────────────────────────────────────
+const SB_URL = "https://udaztjecsontnxhggxlx.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkYXp0amVjc29udG54aGdneGx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1ODQ4NTQsImV4cCI6MjEwMTE2MDg1NH0.1mw0860dLg4QDu7x_O4tHjE943-ABivhsdez9X-os8s";
+const SB_HEADERS = {
+  "apikey": SB_KEY,
+  "Authorization": "Bearer " + SB_KEY,
+  "Content-Type": "application/json",
+  "Prefer": "return=representation"
+};
+
+// ── Classifica in memoria (cache locale aggiornata da Supabase) ──
+let leaderboard = [];
+
+// ── Carica classifica da Supabase ──
+async function loadLB() {
+  try {
+    const res = await fetch(SB_URL + "/rest/v1/leaderboard?select=nickname,pts&order=pts.desc&limit=20", {
+      headers: SB_HEADERS
+    });
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      leaderboard = data.map(r => ({ name: r.nickname, pts: r.pts }));
+    }
+  } catch(e) {
+    console.warn("Errore caricamento classifica:", e);
+  }
+}
+
+// ── Salva/aggiorna punteggio su Supabase ──
+async function updateLB(name, pts) {
+  try {
+    // Controlla se esiste già
+    const res = await fetch(SB_URL + "/rest/v1/leaderboard?nickname=eq." + encodeURIComponent(name) + "&select=id,pts", {
+      headers: SB_HEADERS
+    });
+    const existing = await res.json();
+
+    if (existing && existing.length > 0) {
+      // Aggiorna solo se il punteggio è maggiore
+      if (pts > existing[0].pts) {
+        await fetch(SB_URL + "/rest/v1/leaderboard?id=eq." + existing[0].id, {
+          method: "PATCH",
+          headers: SB_HEADERS,
+          body: JSON.stringify({ pts, updated_at: new Date().toISOString() })
+        });
+      }
+    } else {
+      // Inserisci nuovo record
+      await fetch(SB_URL + "/rest/v1/leaderboard", {
+        method: "POST",
+        headers: SB_HEADERS,
+        body: JSON.stringify({ nickname: name, pts })
+      });
+    }
+    // Ricarica classifica aggiornata
+    await loadLB();
+  } catch(e) {
+    console.warn("Errore aggiornamento classifica:", e);
+    // Fallback locale
+    const existing = leaderboard.findIndex(e => e.name === name);
+    if (existing >= 0) {
+      if (pts > leaderboard[existing].pts) leaderboard[existing].pts = pts;
+    } else {
+      leaderboard.push({ name, pts });
+    }
+    leaderboard.sort((a,b) => b.pts - a.pts);
+  }
+}
+
+function myRank() {
+  return leaderboard.findIndex(e => e.name === nickname) + 1;
+}
+
+function myPts() {
+  const me = leaderboard.find(e => e.name === nickname);
+  return me ? me.pts : 0;
+}
+
+/* =====================================================================
+   SCHERMATA INIZIALE — inserisci nickname
+   ===================================================================== */
+function renderStart() {
+  barRight.textContent = 'start';
+  renderStartUI();
+  // Aggiorna classifica in background e rimostra solo se nella schermata start
+  loadLB().then(() => {
+    if (!nickname) renderStartUI();
+  }).catch(() => {});
+}
+
+function renderStartUI() {
+  wrap.innerHTML = `
+    <div class="eyebrow">ApulianChain presenta</div>
+    <h1><span class="g1">Summer</span> <span class="g2">Meeting 2026</span></h1>
+    <p class="tagline">
+      6 sessioni, 6 argomenti, relatori d'eccezione.<br/>
+      Rispondi correttamente, scala la classifica e vinci un gadget! 🎁
+    </p>
+
+    <div style="padding:14px 16px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:12px;margin-bottom:20px">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:8px">🏆 PREMI — CLASSIFICA FINALE</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13.5px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">🥇</span><span><b style="color:var(--gold)">1° posto</b> — Gadget ApulianChain Premium</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">🥈</span><span><b style="color:#94a3b8">2° posto</b> — Gadget ApulianChain</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">🥉</span><span><b style="color:var(--amber)">3° posto</b> — Gadget ApulianChain</span></div>
+      </div>
+    </div>
+
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:8px">INSERISCI IL TUO NOME PER INIZIARE</div>
+    <div class="nick-form">
+      <input class="nick-input" id="nickIn" type="text" maxlength="24"
+        placeholder="Il tuo nome o nickname..." autocomplete="off"
+        onkeydown="if(event.key==='Enter') startGame()" />
+      <button class="btn btn-primary" onclick="startGame()">Gioca ora →</button>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">
+        Ogni domanda corretta vale punti — più rispondi bene, più sali in classifica.
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="renderQR()" style="margin-left:auto;white-space:nowrap">
+        📱 QR Code
+      </button>
+    </div>
+
+    ${leaderboard.length > 0 ? `
+      <div style="margin-top:22px">
+        <div class="score-panel">
+          <div class="sp-title">🏆 Classifica attuale</div>
+          ${leaderboard.slice(0,5).map((e,i) => `
+            <div class="score-row ${i===0?'gold-row':i===1?'silver-row':i===2?'bronze-row':''}">
+              <span class="pos">${['🥇','🥈','🥉'][i]||'#'+(i+1)}</span>
+              <span class="sname">${esc(e.name)}</span>
+              <span class="spts">${e.pts} pt</span>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+  `;
+  setTimeout(() => document.getElementById('nickIn')?.focus(), 100);
+}
+
+function startGame() {
+  const val = document.getElementById('nickIn')?.value?.trim();
+  if (!val) {
+    document.getElementById('nickIn')?.focus();
+    return;
+  }
+  nickname = val;
+  renderMenu();
+}
+
+/* =====================================================================
+   MENU — selezione sessione
+   ===================================================================== */
+function renderMenu() {
+  barRight.textContent = 'sessioni';
+  const totalPts = Object.values(topicDone).reduce((s,v)=>s+v.pts,0);
+  const allDone  = TOPICS.every(t => topicDone[t.id]);
+
+  wrap.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div class="eyebrow">Ciao, ${esc(nickname)} 👋</div>
+        <div style="font-family:var(--display);font-weight:700;font-size:18px">Scegli la sessione</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">I TUOI PUNTI</div>
+        <div style="font-family:var(--display);font-weight:700;font-size:26px;color:var(--gold)">${totalPts} <span style="font-size:14px;color:var(--muted)">pt</span></div>
+        ${myRank()>0?`<div style="font-family:var(--mono);font-size:10px;color:var(--cyan)"># ${myRank()} in classifica</div>`:''}
+      </div>
+    </div>
+
+    <div class="topics">
+      ${TOPICS.map((t,i) => {
+        const done = topicDone[t.id];
+        return `
+          <button class="topic ${t.cls}" onclick="startTopic(${i})">
+            <span class="t-badge">${t.badge}</span>
+            <span class="t-ic">${t.ic}</span>
+            <span class="t-name">${esc(t.name)}</span>
+            <span class="t-speaker" style="font-size:11px;color:var(--muted)">${esc(t.speaker)}</span>
+            ${done
+              ? `<span class="t-done" style="color:var(--green)">✓ ${done.pts}/${done.total_pts} pt · Rigioca</span>`
+              : `<span class="t-go">▶ Inizia · ${t.pts_per_q * t.questions.length} pt disponibili</span>`}
+          </button>`;
+      }).join('')}
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-gold btn-sm" onclick="renderLeaderboard()">🏆 Classifica</button>
+      <button class="btn btn-ghost btn-sm" onclick="renderQR()">📱 QR Code</button>
+      ${allDone ? `<button class="btn btn-primary btn-sm" onclick="renderFinalResult()">🌟 Risultato Finale</button>` : ''}
+    </div>
+  `;
+}
+
+/* =====================================================================
+   AVVIA TOPIC
+   ===================================================================== */
+function startTopic(i) {
+  currentT  = i;
+  qIdx      = 0;
+  sessionPts= 0;
+  answered  = false;
+  renderQuestion();
+}
+
+/* =====================================================================
+   DOMANDA
+   ===================================================================== */
+function renderQuestion() {
+  answered = false;
+  const t    = TOPICS[currentT];
+  const item = t.questions[qIdx];
+  const pct  = Math.round((qIdx / t.questions.length) * 100);
+  barRight.textContent = `${t.ic} ${qIdx+1}/${t.questions.length}`;
+
+  wrap.innerHTML = `
+    <div class="progress">
+      <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="count">Domanda <b>${qIdx+1}</b> / ${t.questions.length}</div>
+    </div>
+    <div class="qtag">${t.ic} ${esc(t.name)}</div>
+    <div class="q">${esc(item.q)}</div>
+    <div class="options" id="opts"></div>
+    <div class="explain" id="explain">
+      <div class="head" id="exHead"></div>
+      <div id="exBody"></div>
+    </div>
+    <div class="nav" id="nav">
+      <button class="btn btn-ghost btn-sm" onclick="renderMenu()">✕ Menu</button>
+      <span style="flex:1"></span>
+    </div>
+  `;
+
+  const optsEl = document.getElementById('opts');
+  item.opts.forEach((text, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="key">${LETTERS[i]}</span><span>${esc(text)}</span>`;
+    b.addEventListener('click', () => choose(i));
+    optsEl.appendChild(b);
+  });
+}
+
+/* =====================================================================
+   RISPOSTA
+   ===================================================================== */
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  const t    = TOPICS[currentT];
+  const item = t.questions[qIdx];
+  const ok   = i === item.ok;
+  const pts  = ok ? t.pts_per_q : 0;
+  if (ok) sessionPts += pts;
+
+  [...document.querySelectorAll('.opt')].forEach((b,j) => {
+    b.disabled = true;
+    if (j === item.ok) b.classList.add('correct');
+    else if (j === i)  b.classList.add('wrong');
+    else               b.classList.add('dim');
+  });
+
+  const ex = document.getElementById('explain');
+  ex.classList.add('show', ok ? 'ok' : 'no');
+  document.getElementById('exHead').innerHTML =
+    ok ? `✓ Risposta corretta <span class="pts-flash">+${pts} pt</span>` : '✗ Risposta errata';
+  document.getElementById('exBody').innerHTML = item.why;
+
+  const isLast = qIdx === t.questions.length - 1;
+  const next   = document.createElement('button');
+  next.className = 'btn btn-primary';
+  next.textContent = isLast ? 'Vedi risultato →' : 'Prossima domanda →';
+  next.addEventListener('click', () => {
+    if (isLast) renderTopicResult();
+    else { qIdx++; renderQuestion(); }
+  });
+  document.getElementById('nav').appendChild(next);
+  next.focus();
+}
+
+/* =====================================================================
+   RISULTATO TOPIC
+   ===================================================================== */
+function renderTopicResult() {
+  const t      = TOPICS[currentT];
+  const maxPts = t.pts_per_q * t.questions.length;
+  const pct    = Math.round((sessionPts / maxPts) * 100);
+  const deg    = pct * 3.6;
+
+  // Salva
+  topicDone[t.id] = { pts: sessionPts, total_pts: maxPts };
+
+  // Aggiorna leaderboard
+  const totalPts = Object.values(topicDone).reduce((s,v)=>s+v.pts, 0);
+  updateLB(nickname, totalPts);
+
+  let rank, lvl, msg;
+  if (pct === 100) { rank='Perfetto! 🏆'; lvl='lvl-hi'; msg='Risposta esatta su ogni domanda. Sei un esperto di questa sessione!'; }
+  else if (pct>=75){ rank='Ottimo! 🎯';   lvl='lvl-hi'; msg='Quasi perfetto! Hai dimostrato una solida conoscenza.'; }
+  else if (pct>=50){ rank='Bene 📈';       lvl='lvl-mid';msg='Buona base! Qualche risposta da rivedere.'; }
+  else             { rank='Da rivedere 📚';lvl='lvl-lo'; msg='Questo argomento merita più attenzione — riascolta la sessione!'; }
+
+  barRight.textContent = 'risultato sessione';
+  const allDone = TOPICS.every(t => topicDone[t.id]);
+  const totalPtsNow = Object.values(topicDone).reduce((s,v)=>s+v.pts, 0);
+
+  wrap.innerHTML = `
+    <div class="result">
+      <div class="eyebrow" style="text-align:center">${t.ic} ${esc(t.name)}</div>
+      <div class="score-ring" style="--deg:${deg}deg">
+        <div class="score-num">${sessionPts}<span>/${maxPts}</span></div>
+      </div>
+      <div class="rank ${lvl}">${rank}</div>
+      <p class="sub">${msg}</p>
+
+      <div style="padding:10px 16px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:10px;margin-bottom:18px;font-family:var(--mono);font-size:12px">
+        <span style="color:var(--muted)">PUNTEGGIO TOTALE: </span>
+        <span style="color:var(--gold);font-weight:700;font-size:16px">${totalPtsNow} pt</span>
+        ${myRank()>0?`<span style="color:var(--muted);margin-left:10px">· #${myRank()} in classifica</span>`:''}
+      </div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="startTopic(${currentT})">↺ Rigioca</button>
+        <button class="btn btn-ghost btn-sm" onclick="renderMenu()">← Sessioni</button>
+        <button class="btn btn-gold btn-sm" onclick="renderLeaderboard()">🏆 Classifica</button>
+        ${allDone ? `<button class="btn btn-primary" onclick="renderFinalResult()">🌟 Risultato Finale</button>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+/* =====================================================================
+   LEADERBOARD
+   ===================================================================== */
+function renderLeaderboard() {
+  barRight.textContent = 'classifica';
+  // Mostra subito con dati cache, poi ricarica da Supabase
+  renderLeaderboardUI();
+  loadLB().then(() => renderLeaderboardUI());
+}
+
+function renderLeaderboardUI() {
+  const top3  = leaderboard.slice(0,3);
+  const rest  = leaderboard.slice(3,20);
+  const myPos = myRank();
+  const myP   = myPts();
+
+  wrap.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div class="eyebrow">Summer Meeting 2026</div>
+        <div style="font-family:var(--display);font-weight:700;font-size:20px">🏆 Classifica Globale</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="renderMenu()">← Menu</button>
+    </div>
+
+    ${top3.length >= 1 ? `
+    <div style="padding:14px 16px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:12px;margin-bottom:20px;font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:1px;text-align:center">
+      🎁 I PRIMI 3 VINCONO UN GADGET APULIANCHAIN — CONSEGNA AL TERMINE DELL'EVENTO
+    </div>
+
+    <div class="podium">
+      ${top3.length >= 2 ? `
+      <div class="podium-item">
+        <div class="podium-medal">🥈</div>
+        <div class="podium-name" style="color:#94a3b8">${esc(top3[1]?.name||'')}</div>
+        <div class="podium-pts">${top3[1]?.pts||0} pt</div>
+        <div class="podium-block p2-block">2°</div>
+      </div>` : ''}
+      <div class="podium-item">
+        <div class="podium-medal" style="font-size:36px;animation:pop .4s ease">🥇</div>
+        <div class="podium-name" style="color:var(--gold);font-size:15px">${esc(top3[0]?.name||'')}</div>
+        <div class="podium-pts" style="font-size:14px">${top3[0]?.pts||0} pt</div>
+        <div class="podium-block p1-block">1°</div>
+      </div>
+      ${top3.length >= 3 ? `
+      <div class="podium-item">
+        <div class="podium-medal">🥉</div>
+        <div class="podium-name" style="color:var(--amber)">${esc(top3[2]?.name||'')}</div>
+        <div class="podium-pts">${top3[2]?.pts||0} pt</div>
+        <div class="podium-block p3-block">3°</div>
+      </div>` : ''}
+    </div>` : `
+    <div style="text-align:center;padding:30px;color:var(--muted);font-family:var(--mono);font-size:13px">
+      Nessun punteggio ancora. Inizia a giocare!
+    </div>`}
+
+    ${rest.length > 0 ? `
+    <div class="score-panel" style="margin-bottom:16px">
+      <div class="sp-title">Classifica completa</div>
+      ${rest.map((e,i) => `
+        <div class="score-row ${e.name===nickname?'me':''}">
+          <span class="pos" style="color:var(--muted)">#${i+4}</span>
+          <span class="sname">${esc(e.name)}${e.name===nickname?' (tu)':''}</span>
+          <span class="spts">${e.pts} pt</span>
+        </div>`).join('')}
+    </div>` : ''}
+
+    ${myPos > 0 ? `
+    <div style="padding:10px 16px;background:rgba(45,212,255,.07);border:1px solid rgba(45,212,255,.3);border-radius:10px;margin-bottom:16px;font-family:var(--mono);font-size:12px;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:var(--cyan)">La tua posizione: <b>#${myPos}</b></span>
+      <span style="color:var(--gold);font-weight:700">${myP} pt</span>
+    </div>` : ''}
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="renderMenu()">← Continua a giocare</button>
+    </div>
+  `;
+}
+
+/* =====================================================================
+   RISULTATO FINALE (tutti i topic completati)
+   ===================================================================== */
+function renderFinalResult() {
+  const totalPts  = Object.values(topicDone).reduce((s,v)=>s+v.pts,0);
+  const totalMax  = Object.values(topicDone).reduce((s,v)=>s+v.total_pts,0);
+  const pct       = Math.round((totalPts/totalMax)*100);
+  const deg       = pct*3.6;
+  const rank      = myRank();
+
+  let rnk, lvl, msg;
+  if (pct>=90){rnk='DeFi Master 🏆';lvl='lvl-hi';msg='Eccezionale! Hai dominato tutti gli argomenti del Summer Meeting.';}
+  else if(pct>=70){rnk='Web3 Expert 🎯';lvl='lvl-hi';msg='Ottimo! Conoscenza solida su quasi tutto il programma.';}
+  else if(pct>=50){rnk='Blockchain Explorer 🌐';lvl='lvl-mid';msg='Buona base! Continua ad approfondire con ApulianChain.';}
+  else{rnk='Curioso in Crescita 🌱';lvl='lvl-lo';msg='Il viaggio comincia qui. Il Summer Meeting è il tuo punto di partenza!';}
+
+  barRight.textContent = 'risultato finale';
+  wrap.innerHTML = `
+    <div class="result">
+      <div class="eyebrow" style="text-align:center">🌟 Summer Meeting 2026 — Il tuo risultato</div>
+      <div class="score-ring" style="--deg:${deg}deg;background:conic-gradient(var(--green) var(--deg,0deg),var(--bg2) 0deg)">
+        <div class="score-num">${totalPts}<span>/${totalMax}</span></div>
+      </div>
+      <div class="rank ${lvl}">${rnk}</div>
+      <p class="sub">${msg}</p>
+
+      ${rank<=3 ? `
+      <div style="padding:14px 16px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);border-radius:12px;margin-bottom:16px;text-align:center">
+        <div style="font-size:28px;margin-bottom:6px">${['🥇','🥈','🥉'][rank-1]}</div>
+        <div style="font-family:var(--display);font-weight:700;font-size:16px;color:var(--gold)">
+          Sei in top 3! Ritira il tuo gadget ApulianChain 🎁
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px">
+          Mostra questo schermo a un membro dello staff ApulianChain
+        </div>
+      </div>` : `
+      <div style="padding:10px 16px;background:rgba(45,212,255,.07);border:1px solid rgba(45,212,255,.3);border-radius:10px;margin-bottom:16px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--cyan)">
+        La tua posizione attuale: <b>#${rank}</b> con <b>${totalPts} pt</b>
+      </div>`}
+
+      <div class="topic-recap">
+        ${TOPICS.map(t => {
+          const s = topicDone[t.id];
+          if(!s) return '';
+          const p = Math.round(s.pts/s.total_pts*100);
+          return `<div class="tr-card ${p===100?'perfect':p>=50?'partial':'zero'}">
+            <div class="tr-ic">${t.ic}</div>
+            <div class="tr-score">${s.pts}/${s.total_pts}</div>
+            <div class="tr-name">${t.badge}</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-gold btn-sm" onclick="renderLeaderboard()">🏆 Classifica</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetAll()">↺ Ricomincia</button>
+      </div>
+    </div>
+  `;
+}
+
+function resetAll() {
+  topicDone = {};
+  renderMenu();
+}
+
+/* =====================================================================
+   QR CODE — generato dall'URL corrente della pagina
+   ===================================================================== */
+function renderQR() {
+  barRight.textContent = 'qr code';
+  const url = window.location.href.split('?')[0]; // URL pulito senza params
+
+  wrap.innerHTML = `
+    <div style="text-align:center;padding:10px 0">
+      <div class="eyebrow" style="text-align:center">📱 Scansiona per giocare</div>
+      <h1 style="font-size:22px;margin-bottom:6px"><span class="g1">Summer</span> <span class="g2">Meeting 2026</span></h1>
+      <p style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:20px">
+        Inquadra il QR con la fotocamera del tuo smartphone
+      </p>
+
+      <div style="display:inline-block;background:#fff;padding:18px;border-radius:16px;
+        box-shadow:0 0 40px rgba(45,212,255,.25),0 0 80px rgba(45,212,255,.1);
+        margin-bottom:16px">
+        <div id="qrcode"></div>
+      </div>
+
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);
+        margin-bottom:6px;word-break:break-all;padding:0 10px">
+        ${url}
+      </div>
+
+      <div style="padding:12px 16px;background:rgba(245,158,11,.07);
+        border:1px solid rgba(245,158,11,.3);border-radius:12px;
+        margin:16px 0;font-family:var(--mono);font-size:11px;
+        color:var(--gold);letter-spacing:1px;line-height:1.7">
+        🎁 I PRIMI 3 IN CLASSIFICA VINCONO UN GADGET APULIANCHAIN<br/>
+        <span style="color:var(--muted)">Rispondi a tutte le 6 sessioni per massimizzare i punti</span>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="renderStart()">← Gioca ora</button>
+        <button class="btn btn-ghost btn-sm" onclick="renderLeaderboard()">🏆 Classifica</button>
+      </div>
+    </div>
+  `;
+
+  // Genera QR code dopo che il DOM è pronto
+  setTimeout(() => {
+    const el = document.getElementById('qrcode');
+    if (!el) return;
+    try {
+      new QRCode(el, {
+        text:           url || 'https://apulianchain.com',
+        width:          200,
+        height:         200,
+        colorDark:      '#070b16',
+        colorLight:     '#ffffff',
+        correctLevel:   QRCode.CorrectLevel.H,
+      });
+    } catch(e) {
+      // Fallback se la libreria non è disponibile
+      el.innerHTML = `
+        <div style="width:200px;height:200px;display:flex;flex-direction:column;
+          align-items:center;justify-content:center;background:#111a2e;
+          border-radius:8px;gap:10px">
+          <div style="font-size:40px">📱</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--cyan);
+            text-align:center;padding:0 12px">
+            Condividi manualmente l'URL qui sopra
+          </div>
+        </div>`;
+    }
+  }, 80);
+}
+
+/* =====================================================================
+   AVVIO — mostra subito la UI, classifica carica in background
+   ===================================================================== */
+renderStart();
+loadLB(); // carica in background, non blocca la UI
+</script>
+</body>
+</html>
