@@ -495,9 +495,22 @@ function myPts() {
 function renderStart() {
   barRight.textContent = 'start';
   renderStartUI();
-  // Aggiorna classifica in background e rimostra solo se nella schermata start
+  // Carica classifica in background — non ricostruisce il DOM
   loadLB().then(() => {
-    if (!nickname) renderStartUI();
+    // Aggiorna solo il pannello classifica se esiste, senza ricostruire tutto
+    const lbPanel = document.getElementById('lbPanel');
+    if (lbPanel && leaderboard.length > 0) {
+      lbPanel.innerHTML = `
+        <div class="score-panel" style="margin-top:22px">
+          <div class="sp-title">🏆 Classifica attuale</div>
+          ${leaderboard.slice(0,5).map((e,i) => `
+            <div class="score-row ${i===0?'gold-row':i===1?'silver-row':i===2?'bronze-row':''}">
+              <span class="pos">${['🥇','🥈','🥉'][i]||'#'+(i+1)}</span>
+              <span class="sname">${esc(e.name)}</span>
+              <span class="spts">${e.pts} pt</span>
+            </div>`).join('')}
+        </div>`;
+    }
   }).catch(() => {});
 }
 
@@ -537,8 +550,8 @@ function renderStartUI() {
     </div>
 
     ${leaderboard.length > 0 ? `
-      <div style="margin-top:22px">
-        <div class="score-panel">
+      <div id="lbPanel">
+        <div class="score-panel" style="margin-top:22px">
           <div class="sp-title">🏆 Classifica attuale</div>
           ${leaderboard.slice(0,5).map((e,i) => `
             <div class="score-row ${i===0?'gold-row':i===1?'silver-row':i===2?'bronze-row':''}">
@@ -547,7 +560,7 @@ function renderStartUI() {
               <span class="spts">${e.pts} pt</span>
             </div>`).join('')}
         </div>
-      </div>` : ''}
+      </div>` : '<div id="lbPanel"></div>'}
   `;
   setTimeout(() => document.getElementById('nickIn')?.focus(), 100);
 }
