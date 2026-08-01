@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Summer Meeting 2026 — ApulianChain</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --bg:#070b16; --panel:#111a2e; --line:#22324f;
+  --cyan:#2dd4ff; --blue:#3b6bff; --green:#39e08a;
+  --red:#ff4d6d; --amber:#ffb84d; --gold:#f59e0b;
+  --purple:#a78bfa; --text:#e9eefb; --muted:#8794b3;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Space Grotesk',sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; display:flex;
+  align-items:center; justify-content:center;
+  padding:16px;
+}
+.app {
+  width:100%; max-width:780px;
+  background:linear-gradient(180deg,#16223cdd,#0d1a2eed);
+  border:1px solid var(--line); border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);
+}
+.bar {
+  display:flex; align-items:center; gap:8px;
+  padding:12px 18px; background:rgba(7,11,22,.6);
+  border-bottom:1px solid var(--line);
+}
+.dot { width:10px; height:10px; border-radius:50%; }
+.bar-title { font-family:'Space Mono',monospace; font-size:12px; color:var(--muted); margin-left:4px; flex:1; }
+.bar-title b { color:var(--cyan); }
+.bar-scene { font-family:'Space Mono',monospace; font-size:10px; color:var(--amber); }
+.body { padding:26px 24px; min-height:400px; }
+.foot {
+  border-top:1px solid var(--line); padding:10px 18px;
+  display:flex; justify-content:space-between;
+  font-family:'Space Mono',monospace; font-size:10px; color:var(--muted);
+}
+
+/* TYPOGRAPHY */
+.eyebrow { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--cyan); margin-bottom:8px; }
+h1 { font-size:clamp(22px,5vw,36px); font-weight:700; line-height:1.1; margin-bottom:6px; }
+.g1 { background:linear-gradient(90deg,#fff,var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.g2 { background:linear-gradient(90deg,var(--cyan),var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.tagline { color:var(--muted); font-size:14px; margin:8px 0 18px; line-height:1.6; }
+
+/* BUTTONS */
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'Space Grotesk',sans-serif; font-weight:600;
+  font-size:14px; padding:11px 20px; border-radius:10px;
+  border:none; cursor:pointer; transition:transform .12s, filter .12s;
+}
+.btn:hover { transform:translateY(-2px); filter:brightness(1.08); }
+.btn-primary { background:linear-gradient(90deg,var(--cyan),var(--blue)); color:#06111f; }
+.btn-gold    { background:linear-gradient(90deg,var(--gold),var(--amber)); color:#06111f; }
+.btn-ghost   { background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-sm      { font-size:12px; padding:8px 14px; }
+
+/* INPUT */
+.input-row { display:flex; gap:10px; margin:16px 0; flex-wrap:wrap; }
+.nick-input {
+  flex:1; min-width:180px; padding:11px 14px;
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:10px; color:var(--text);
+  font-family:'Space Grotesk',sans-serif; font-size:15px; outline:none;
+  transition:border-color .2s;
+}
+.nick-input:focus { border-color:var(--cyan); }
+
+/* PRIZES BOX */
+.prizes {
+  padding:14px 16px; background:rgba(245,158,11,.07);
+  border:1px solid rgba(245,158,11,.3); border-radius:12px;
+  margin-bottom:18px;
+}
+.prizes-title { font-family:'Space Mono',monospace; font-size:10px; color:var(--gold); letter-spacing:2px; margin-bottom:8px; }
+.prize-row { display:flex; align-items:center; gap:10px; font-size:13px; margin-bottom:4px; }
+
+/* TOPICS GRID */
+.topics { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }
+.topic {
+  padding:14px; background:var(--panel);
+  border:1px solid var(--line); border-radius:12px;
+  cursor:pointer; text-align:left; color:var(--text);
+  transition:border-color .15s, transform .12s;
+  display:flex; flex-direction:column; gap:4px;
+}
+.topic:hover { transform:translateY(-2px); }
+.topic .t-ic { font-size:20px; }
+.topic .t-name { font-weight:700; font-size:14px; }
+.topic .t-speaker { font-size:11px; color:var(--muted); }
+.topic .t-pts { font-family:'Space Mono',monospace; font-size:10px; margin-top:4px; }
+.topic.c1 { border-color:rgba(45,212,255,.3); } .topic.c1:hover { border-color:var(--cyan); } .topic.c1 .t-pts { color:var(--cyan); }
+.topic.c2 { border-color:rgba(59,107,255,.3); } .topic.c2:hover { border-color:var(--blue); } .topic.c2 .t-pts { color:#7a9eff; }
+.topic.c3 { border-color:rgba(255,77,109,.3); } .topic.c3:hover { border-color:var(--red); }  .topic.c3 .t-pts { color:var(--red); }
+.topic.c4 { border-color:rgba(255,184,77,.3); } .topic.c4:hover { border-color:var(--amber); }.topic.c4 .t-pts { color:var(--amber); }
+.topic.c5 { border-color:rgba(57,224,138,.3); } .topic.c5:hover { border-color:var(--green); }.topic.c5 .t-pts { color:var(--green); }
+.topic.c6 { border-color:rgba(167,139,250,.3); }.topic.c6:hover { border-color:var(--purple);}  .topic.c6 .t-pts { color:var(--purple); }
+
+/* PROGRESS */
+.progress { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.track { flex:1; height:7px; background:rgba(255,255,255,.08); border-radius:99px; overflow:hidden; }
+.fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--blue)); border-radius:99px; transition:width .4s; }
+.count { font-family:'Space Mono',monospace; font-size:12px; color:var(--muted); white-space:nowrap; }
+.count b { color:var(--text); }
+
+/* QUESTION */
+.qtag { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:8px; }
+.question { font-size:clamp(17px,3vw,22px); font-weight:700; line-height:1.35; margin-bottom:18px; }
+
+/* OPTIONS */
+.options { display:flex; flex-direction:column; gap:10px; }
+.opt {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:12px 14px; background:var(--panel);
+  border:1px solid var(--line); border-radius:11px;
+  cursor:pointer; color:var(--text); font-size:14px;
+  text-align:left; transition:border-color .15s, background .15s;
+  font-family:'Space Grotesk',sans-serif;
+}
+.opt:hover:not(:disabled) { border-color:var(--cyan); background:rgba(45,212,255,.05); }
+.opt .key {
+  flex:none; width:26px; height:26px; border-radius:7px;
+  font-family:'Space Mono',monospace; font-size:12px; font-weight:700;
+  display:grid; place-items:center;
+  background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted);
+}
+.opt.correct { border-color:var(--green); background:rgba(57,224,138,.1); }
+.opt.correct .key { background:var(--green); color:#04140b; border-color:var(--green); }
+.opt.wrong { border-color:var(--red); background:rgba(255,77,109,.1); }
+.opt.wrong .key { background:var(--red); color:#1a0309; border-color:var(--red); }
+.opt.dim { opacity:.4; }
+.opt:disabled { cursor:default; }
+
+/* EXPLAIN */
+.explain {
+  margin-top:14px; padding:14px; border-radius:10px;
+  border:1px solid var(--line); background:rgba(59,107,255,.07);
+  font-size:13.5px; line-height:1.65; display:none;
+}
+.explain.show { display:block; animation:rise .3s ease; }
+.explain-head { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+.explain.ok .explain-head { color:var(--green); }
+.explain.no .explain-head { color:var(--red); }
+.explain b { color:var(--cyan); }
+.pts-badge { display:inline-block; font-family:'Space Mono',monospace; font-size:12px; color:var(--gold); border:1px solid var(--gold); border-radius:6px; padding:2px 8px; margin-left:8px; }
+
+/* NAV */
+.nav { display:flex; justify-content:space-between; align-items:center; margin-top:18px; gap:10px; flex-wrap:wrap; }
+
+/* SCORE RING */
+.result { text-align:center; padding:8px 0; }
+.ring-wrap { position:relative; width:150px; height:150px; margin:10px auto 16px; }
+.ring-svg { transform:rotate(-90deg); }
+.ring-circle { fill:none; stroke:rgba(255,255,255,.08); stroke-width:12; }
+.ring-progress { fill:none; stroke:var(--cyan); stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset .8s ease; }
+.ring-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; }
+.ring-sub { font-size:14px; color:var(--muted); }
+.rank { font-size:22px; font-weight:700; margin-bottom:6px; }
+.rank.hi { color:var(--green); } .rank.mid { color:var(--cyan); } .rank.lo { color:var(--amber); }
+.result p { color:var(--muted); font-size:14px; max-width:46ch; margin:0 auto 18px; }
+.result .btn { margin:5px; }
+
+/* LEADERBOARD */
+.lb-panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:16px; }
+.lb-title { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.lb-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); }
+.lb-row:last-child { border-bottom:none; }
+.lb-row.me { background:rgba(45,212,255,.06); border-radius:8px; padding:8px 10px; margin:0 -10px; }
+.lb-pos { font-family:'Space Mono',monospace; font-size:14px; width:28px; text-align:center; }
+.lb-name { flex:1; font-weight:600; font-size:14px; }
+.lb-pts { font-family:'Space Mono',monospace; font-size:13px; color:var(--gold); font-weight:700; }
+
+/* TOPIC RECAP */
+.recap { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:14px 0 20px; }
+.recap-card { padding:10px; background:var(--panel); border:1px solid var(--line); border-radius:9px; text-align:center; }
+.recap-ic { font-size:16px; margin-bottom:3px; }
+.recap-score { font-family:'Space Mono',monospace; font-size:12px; font-weight:700; }
+.recap-name { font-size:9px; color:var(--muted); margin-top:2px; }
+.recap-card.p { border-color:rgba(57,224,138,.4); } .recap-card.p .recap-score { color:var(--green); }
+.recap-card.h { border-color:rgba(255,184,77,.4); } .recap-card.h .recap-score { color:var(--amber); }
+.recap-card.l { border-color:rgba(255,77,109,.4); } .recap-card.l .recap-score { color:var(--red); }
+
+/* QR */
+.qr-box { display:inline-block; background:#fff; padding:14px; border-radius:12px; margin:14px auto; box-shadow:0 0 30px rgba(45,212,255,.2); }
+
+@keyframes rise { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+@media(max-width:520px) {
+  .topics { grid-template-columns:1fr; }
+  .recap  { grid-template-columns:1fr 1fr; }
+  .body   { padding:20px 14px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <span class="dot" style="background:#ff5f57"></span>
+    <span class="dot" style="background:#febc2e"></span>
+    <span class="dot" style="background:#28c840"></span>
+    <span class="bar-title"><b>ApulianChain</b> · Summer Meeting 2026</span>
+    <span class="bar-scene" id="scene">menu</span>
+  </div>
+  <div class="body" id="body"></div>
+  <div class="foot">
+    <span><b style="color:var(--text)">ApulianChain</b> APS · Powered by DeGate</span>
+    <span>Sabato 1 Agosto 2026 · Ostuni (BR)</span>
+  </div>
+</div>
+
+<script>
+// ── DATI SESSIONI ─────────────────────────────────────────────
+var SESS = [
+  {
+    id:"s1", ic:"🏫", cls:"c1", badge:"Sessione 1", ppp:100,
+    name:"ApulianChain APS & Scuole",
+    speaker:"Alfredo HokenTech",
+    qs:[
+      {q:"Qual è la missione principale di ApulianChain APS?",
+       o:["Vendere criptovalute nelle scuole","Portare educazione finanziaria e Web3 direttamente nelle scuole italiane","Sviluppare exchange centralizzati","Offrire consulenza fiscale"],
+       ok:1, why:"ApulianChain APS porta <b>educazione finanziaria e Web3</b> nelle scuole: blockchain, DeFi, cybersecurity — competenze reali per i ragazzi di oggi."},
+      {q:"Perché l'educazione Web3 nelle scuole è prioritaria per ApulianChain?",
+       o:["Per fare speculazione finanziaria","Perché le competenze digitali saranno fondamentali nel mercato del lavoro futuro","Perché è obbligatorio per legge","Per raccogliere fondi"],
+       ok:1, why:"Il futuro del lavoro richiede <b>blockchain, AI, DeFi e cybersecurity</b>. Formare i giovani oggi significa dargli un vantaggio competitivo reale."},
+      {q:"Cos'è un'APS (Associazione di Promozione Sociale)?",
+       o:["Una società per azioni","Un'organizzazione no-profit che svolge attività di utilità sociale","Una banca centrale","Un fondo di investimento"],
+       ok:1, why:"Un'<b>APS</b> è un ente del Terzo Settore che opera senza scopo di lucro per promuovere attività culturali, educative e sociali."},
+      {q:"Cosa misura il 'bilancio delle esperienze' di ApulianChain nelle scuole?",
+       o:["Il bilancio contabile","L'impatto formativo reale: studenti raggiunti, competenze acquisite, feedback ricevuto","Il numero di Bitcoin distribuiti","Il rendiconto fiscale"],
+       ok:1, why:"Il bilancio delle esperienze misura l'<b>impatto reale</b> dei percorsi formativi: quanti studenti raggiunti, quali competenze acquisite, quale cambiamento generato."}
+    ]
+  },
+  {
+    id:"s2", ic:"🌐", cls:"c2", badge:"Sessione 2", ppp:120,
+    name:"DeGate & Ecosistema DeFi",
+    speaker:"Davide Pietrangelo & Linda — Officina DeFi",
+    qs:[
+      {q:"Cos'è DeGate e quale problema risolve nella DeFi?",
+       o:["Un wallet per NFT","Un DEX Layer 2 con order book che combina sicurezza blockchain e velocità di un CEX","Una stablecoin algoritmica","Un protocollo di lending su L1"],
+       ok:1, why:"<b>DeGate</b> è un DEX su Layer 2 basato su ZK-Rollup: alta velocità + bassi costi + sicurezza non-custodial."},
+      {q:"Cosa significa 'non-custodial' in un DEX?",
+       o:["L'exchange custodisce le tue chiavi","L'utente mantiene sempre il controllo delle proprie chiavi private","Non si possono fare prelievi","I fondi sono bloccati 30 giorni"],
+       ok:1, why:"<b>Non-custodial</b>: le tue chiavi restano sempre in tuo possesso. Nessun exchange può bloccarti i fondi."},
+      {q:"Cosa sono i ZK-Rollup usati da DeGate?",
+       o:["Un tipo di mining","Tecnologia che comprime migliaia di transazioni in una prova crittografica verificabile su L1","Un protocollo di staking","Un algoritmo di trading"],
+       ok:1, why:"I <b>ZK-Rollup</b> raggruppano transazioni off-chain e generano una proof matematica verificata su Ethereum: costi minimi, alta velocità."},
+      {q:"Cos'è un Order Book decentralizzato?",
+       o:["Un registro cartaceo","Un sistema che replica gli exchange tradizionali (ordini limit/market) senza intermediari centralizzati","Un algoritmo di mining","Un tipo di stablecoin"],
+       ok:1, why:"L'<b>Order Book decentralizzato</b> porta la precisione degli exchange tradizionali nel mondo DeFi senza AMM."}
+    ]
+  },
+  {
+    id:"s3", ic:"🔒", cls:"c3", badge:"Sessione 3", ppp:110,
+    name:"Cybersecurity: Sfide Attuali",
+    speaker:"Antonio Petruzzelli & Vincenzo Papagna",
+    qs:[
+      {q:"Qual è la minaccia n.1 per chi detiene asset crypto?",
+       o:["Il surriscaldamento del processore","Il phishing: email e siti fake che imitano wallet ed exchange per rubare seed phrase","La volatilità del prezzo","L'aggiornamento del firmware"],
+       ok:1, why:"Il <b>phishing crypto</b> è la minaccia n.1. Regola d'oro: nessun servizio legittimo chiederà MAI le tue 12/24 parole del seed phrase."},
+      {q:"Cosa rende devastante un Seed Phrase Phishing?",
+       o:["Rallenta le transazioni","Chi ottiene le 12/24 parole del seed ottiene accesso completo e irrevocabile all'intero wallet","Blocca l'account per 24 ore","Richiede la banca"],
+       ok:1, why:"Il <b>seed phrase</b> è la chiave master: con quelle parole si svuota il wallet. Non c'è recupero. Va conservato offline, fisicamente."},
+      {q:"Quale strumento offre il massimo livello di sicurezza per crypto a lungo termine?",
+       o:["Lasciare i fondi sull'exchange","Un'app mobile con PIN","Un hardware wallet (Ledger, Trezor): la chiave non tocca mai internet","Un documento Word con le password"],
+       ok:2, why:"L'<b>hardware wallet</b> è il gold standard: la chiave privata viene generata e rimane nel dispositivo fisico, offline. Mai esposta."},
+      {q:"In un attacco SQL Injection, quale payload bypassa un login vulnerabile?",
+       o:["https://","404 NOT FOUND","' OR 1=1 --","Ctrl + Alt + Canc"],
+       ok:2, why:"<b>' OR 1=1 --</b> inganna il database rendendo la condizione sempre vera. Si previene con Prepared Statements."}
+    ]
+  },
+  {
+    id:"s4", ic:"📊", cls:"c4", badge:"Sessione 4", ppp:130,
+    name:"Hyperliquid & Polymarket",
+    speaker:"Marco Virtual Architects & Alessio CryptoEater",
+    qs:[
+      {q:"Cos'è Hyperliquid?",
+       o:["Un exchange centralizzato","Un DEX perp on-chain con proprio Layer 1 (HyperEVM) che offre trading perpetuo con order book completamente decentralizzato","Un protocollo di staking","Una stablecoin"],
+       ok:1, why:"<b>Hyperliquid</b> ha costruito il proprio Layer 1 per il trading: order book on-chain, futures perpetui, latenza sub-secondo."},
+      {q:"Cosa sono i 'futures perpetui' (perp)?",
+       o:["Contratti che scadono ogni lunedì","Derivati che permettono leva su un asset senza scadenza, con funding rate che bilancia long e short","Obbligazioni tokenizzate","Token che generano rendite passive"],
+       ok:1, why:"I <b>perpetual futures</b> sono contratti senza scadenza. Il <b>funding rate</b> mantiene il prezzo del perp allineato allo spot."},
+      {q:"Cos'è Polymarket?",
+       o:["Un exchange di NFT","Una piattaforma dove si tradano quote su eventi reali in USDC: il prezzo riflette la probabilità implicita del mercato","Un protocollo di lending","Un DEX per stablecoin"],
+       ok:1, why:"<b>Polymarket</b> è il principale prediction market decentralizzato. Una quota a 0,70$ = 70% di probabilità stimata dal mercato."},
+      {q:"Qual è il rischio principale del trading con leva su DEX?",
+       o:["Ricevere troppi profitti","La liquidazione: se il mercato va contro la posizione oltre soglia, il collaterale viene liquidato automaticamente","Il gas fee troppo basso","La lentezza delle transazioni"],
+       ok:1, why:"La <b>liquidazione</b> è il rischio chiave: con 10x leva, un -10% azzera il collaterale. Stop-loss precisi sono fondamentali."}
+    ]
+  },
+  {
+    id:"s5", ic:"📈", cls:"c5", badge:"Sessione 5", ppp:120,
+    name:"DeFi nel 2026 — Team1 Builder Hub",
+    speaker:"Alessio CryptoPub & Jack — Team Avalanche",
+    qs:[
+      {q:"Quale normativa ha avuto il maggiore impatto sulla DeFi nel 2025-2026?",
+       o:["Il GDPR del 2018","Il regolamento MiCA: requisiti di licenza, trasparenza e protezione utenti per emittenti crypto nell'UE","Il Trattato di Lisbona","La Direttiva IPPC"],
+       ok:1, why:"<b>MiCA</b> è il framework crypto più completo al mondo: licenze, whitepaper, riserve per stablecoin. Sta ridisegnando l'industria crypto europea."},
+      {q:"Cosa si intende per TVL (Total Value Locked)?",
+       o:["Il valore delle tasse pagate ai miner","La somma di asset depositati nei protocolli DeFi: misura la fiducia del mercato e la liquidità disponibile","Il numero di wallet attivi","Il prezzo medio del gas fee"],
+       ok:1, why:"Il <b>TVL</b> è il termometro della DeFi. Nel 2024-2025 ha superato $100 miliardi. Monitorabile su DeFiLlama."},
+      {q:"Quale trend guida l'adozione istituzionale della DeFi nel 2026?",
+       o:["La recessione globale","La tokenizzazione degli asset reali (RWA): bond, immobili e fondi portati on-chain per investitori istituzionali","L'aumento dei tassi Fed","La fine degli smart contract"],
+       ok:1, why:"La <b>tokenizzazione RWA</b> è il trend istituzionale più importante: BlackRock, Franklin Templeton portano miliardi on-chain."},
+      {q:"Cos'è Team1 Builder Hub?",
+       o:["Un exchange centralizzato","Un hub per builder e sviluppatori Web3 che supporta startup e progetti nell'ecosistema blockchain","Un protocollo di lending","Un wallet hardware"],
+       ok:1, why:"<b>Team1 Builder Hub</b> supporta startup, builder e progetti blockchain — partner chiave del Summer Meeting ApulianChain 2026."}
+    ]
+  },
+  {
+    id:"s6", ic:"🤖", cls:"c6", badge:"Sessione 6", ppp:140,
+    name:"Startup & Automazione IA",
+    speaker:"Mario Mastrulli",
+    qs:[
+      {q:"Come sta cambiando l'IA i modelli delle startup digitali nel 2026?",
+       o:["Le startup usano l'IA solo per il marketing","L'IA permette a team piccoli di automatizzare funzioni intere riducendo i costi operativi fino all'80%","L'IA sostituisce i founder","L'IA è utile solo per le grandi aziende"],
+       ok:1, why:"Le <b>startup AI-native</b> del 2026 operano con 2-5 persone raggiungendo scale che prima richiedevano 50+. Agenti AI autonomi azzerano interi reparti."},
+      {q:"Cos'è un 'agente AI'?",
+       o:["Un chatbot che risponde alle FAQ","Un sistema AI autonomo che pianifica azioni multi-step e le esegue in autonomia per raggiungere un obiettivo","Un software antivirus","Un algoritmo di trading ad alta frequenza"],
+       ok:1, why:"Gli <b>agenti AI</b> pianificano, usano tool, navigano il web, scrivono codice, gestiscono email. Completano workflow complessi in autonomia."},
+      {q:"In che modo l'IA trasforma la compliance finanziaria?",
+       o:["Non ha applicazioni in questo settore","L'IA analizza in real-time milioni di transazioni per rilevare frodi e rischi AML con precisione superiore","La compliance IA è illegale nell'UE","Solo le banche centrali possono usarla"],
+       ok:1, why:"L'<b>IA applicata alla compliance</b>: ML per frodi in real-time, NLP per contratti e normative, agenti per KYC/AML automatizzato."},
+      {q:"Qual è il rischio principale nell'adottare AI senza strategia?",
+       o:["Consuma troppa batteria","Dipendenza da tool non verificati, allucinazioni in decisioni critiche, rischi GDPR e vendor lock-in","I clienti non capiscono i prodotti AI","L'IA funziona sempre perfettamente"],
+       ok:1, why:"Rischi reali: <b>allucinazioni</b> in contesti critici, <b>violazioni GDPR</b>, <b>vendor lock-in</b>. L'AI va adottata con governance chiara."}
+    ]
+  }
+];
+
+// ── SUPABASE ──────────────────────────────────────────────────
+var SB = "https://udaztjecsontnxhggxlx.supabase.co";
+var SK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkYXp0amVjc29udG54aGdneGx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1ODQ4NTQsImV4cCI6MjEwMTE2MDg1NH0.1mw0860dLg4QDu7x_O4tHjE943-ABivhsdez9X-os8s";
+
+function sbH() { return {"apikey":SK,"Authorization":"Bearer "+SK,"Content-Type":"application/json"}; }
+
+function sbLoad(cb) {
+  fetch(SB+"/rest/v1/leaderboard?select=nickname,pts&order=pts.desc&limit=20",{headers:sbH()})
+  .then(function(r){return r.json();})
+  .then(function(d){ if(Array.isArray(d)) { LB=d.map(function(r){return{name:r.nickname,pts:r.pts};}); } if(cb) cb(); })
+  .catch(function(){if(cb) cb();});
+}
+
+function sbSave(name, pts) {
+  // update local cache
+  var i=LB.findIndex(function(e){return e.name===name;});
+  if(i>=0){if(pts>LB[i].pts)LB[i].pts=pts;}else{LB.push({name:name,pts:pts});}
+  LB.sort(function(a,b){return b.pts-a.pts;});
+  // save to DB
+  fetch(SB+"/rest/v1/leaderboard?nickname=eq."+encodeURIComponent(name),{headers:sbH()})
+  .then(function(r){return r.json();})
+  .then(function(rows){
+    if(rows&&rows.length>0){
+      if(pts>rows[0].pts){fetch(SB+"/rest/v1/leaderboard?id=eq."+rows[0].id,{method:"PATCH",headers:sbH(),body:JSON.stringify({pts:pts})}).catch(function(){});}
+    } else {
+      fetch(SB+"/rest/v1/leaderboard",{method:"POST",headers:Object.assign({},sbH(),{"Prefer":"return=minimal"}),body:JSON.stringify({nickname:name,pts:pts})}).catch(function(){});
+    }
+  }).catch(function(){});
+}
+
+// ── STATO ────────────────────────────────────────────────────
+var NICK="", CUR=null, QI=0, SP=0, ANS=false, DONE={}, LB=[];
+var BD=document.getElementById("body");
+var SC=document.getElementById("scene");
+var LTRS=["A","B","C","D"];
+function xe(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function totalPts(){var t=0;Object.keys(DONE).forEach(function(k){t+=DONE[k].pts;});return t;}
+function myRank(){return LB.findIndex(function(e){return e.name===NICK;})+1;}
+function myPts(){var m=LB.find(function(e){return e.name===NICK;});return m?m.pts:0;}
+
+// ── START ─────────────────────────────────────────────────────
+function showStart() {
+  SC.textContent="start";
+  var lbHtml="";
+  if(LB.length>0){
+    lbHtml="<div class='lb-panel' style='margin-top:18px'><div class='lb-title'>🏆 Classifica attuale</div>";
+    var mx=["🥇","🥈","🥉"];
+    LB.slice(0,5).forEach(function(e,i){
+      lbHtml+="<div class='lb-row"+(e.name===NICK?" me":"")+"'><span class='lb-pos'>"+(mx[i]||"#"+(i+1))+"</span><span class='lb-name'>"+xe(e.name)+"</span><span class='lb-pts'>"+e.pts+" pt</span></div>";
+    });
+    lbHtml+="</div>";
+  }
+  BD.innerHTML=
+    "<div class='eyebrow'>ApulianChain presenta</div>"+
+    "<h1><span class='g1'>Summer</span> <span class='g2'>Meeting 2026</span></h1>"+
+    "<p class='tagline'>6 sessioni, 6 argomenti, relatori d'eccezione.<br>Rispondi correttamente, scala la classifica e vinci un gadget! 🎁</p>"+
+    "<div class='prizes'>"+
+    "<div class='prizes-title'>🏆 PREMI — CLASSIFICA FINALE</div>"+
+    "<div class='prize-row'><span style='font-size:18px'>🥇</span><span><b style='color:var(--gold)'>1° posto</b> — Gadget ApulianChain Premium</span></div>"+
+    "<div class='prize-row'><span style='font-size:18px'>🥈</span><span><b style='color:#94a3b8'>2° posto</b> — Gadget ApulianChain</span></div>"+
+    "<div class='prize-row'><span style='font-size:18px'>🥉</span><span><b style='color:var(--amber)'>3° posto</b> — Gadget ApulianChain</span></div>"+
+    "</div>"+
+    "<div style='font-family:Space Mono,monospace;font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:8px'>INSERISCI IL TUO NOME PER INIZIARE</div>"+
+    "<div class='input-row'>"+
+    "<input class='nick-input' id='ni' type='text' maxlength='24' placeholder='Il tuo nome o nickname...'>"+
+    "<button class='btn btn-primary' id='btnGo'>Gioca ora →</button>"+
+    "</div>"+
+    "<div style='display:flex;gap:10px;align-items:center;margin-top:6px'>"+
+    "<span style='font-family:Space Mono,monospace;font-size:11px;color:var(--muted)'>Ogni risposta corretta vale punti</span>"+
+    "<button class='btn btn-ghost btn-sm' id='btnQR' style='margin-left:auto'>📱 QR Code</button>"+
+    "</div>"+
+    lbHtml;
+
+  document.getElementById("btnGo").onclick=function(){
+    var v=(document.getElementById("ni").value||"").trim();
+    if(!v){document.getElementById("ni").focus();return;}
+    NICK=v; showMenu();
+  };
+  document.getElementById("ni").onkeydown=function(e){if(e.key==="Enter")document.getElementById("btnGo").click();};
+  document.getElementById("btnQR").onclick=showQR;
+  document.getElementById("ni").focus();
+}
+
+// ── MENU ──────────────────────────────────────────────────────
+function showMenu() {
+  SC.textContent="sessioni";
+  var tp=totalPts();
+  var allDone=SESS.every(function(s){return DONE[s.id];});
+
+  var grid="<div class='topics'>";
+  SESS.forEach(function(s,i){
+    var d=DONE[s.id];
+    grid+="<button class='topic "+s.cls+"' data-i='"+i+"'>"+
+      "<span class='t-ic'>"+s.ic+"</span>"+
+      "<span class='t-name'>"+xe(s.name)+"</span>"+
+      "<span class='t-speaker'>"+xe(s.speaker)+"</span>"+
+      "<span class='t-pts'>"+(d?"✓ "+d.pts+"/"+d.mp+" pt · Rigioca":"▶ "+(s.ppp*s.qs.length)+" pt disponibili")+"</span>"+
+      "</button>";
+  });
+  grid+="</div>";
+
+  BD.innerHTML=
+    "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px'>"+
+    "<div><div class='eyebrow'>Ciao, "+xe(NICK)+" 👋</div><div style='font-size:18px;font-weight:700'>Scegli la sessione</div></div>"+
+    "<div style='text-align:right'>"+
+    "<div style='font-family:Space Mono,monospace;font-size:10px;color:var(--muted)'>I TUOI PUNTI</div>"+
+    "<div style='font-size:26px;font-weight:700;color:var(--gold)'>"+tp+" <span style='font-size:13px;color:var(--muted)'>pt</span></div>"+
+    (myRank()>0?"<div style='font-family:Space Mono,monospace;font-size:10px;color:var(--cyan)'># "+myRank()+" in classifica</div>":"")+
+    "</div></div>"+
+    grid+
+    "<div style='display:flex;gap:8px;margin-top:14px;flex-wrap:wrap'>"+
+    "<button class='btn btn-gold btn-sm' id='btnLB'>🏆 Classifica</button>"+
+    "<button class='btn btn-ghost btn-sm' id='btnQR2'>📱 QR Code</button>"+
+    (allDone?"<button class='btn btn-primary btn-sm' id='btnFin'>🌟 Risultato Finale</button>":"")+
+    "</div>";
+
+  BD.querySelectorAll(".topic[data-i]").forEach(function(b){
+    b.onclick=function(){startSess(parseInt(b.getAttribute("data-i")));};
+  });
+  document.getElementById("btnLB").onclick=function(){showLB();};
+  document.getElementById("btnQR2").onclick=showQR;
+  if(allDone) document.getElementById("btnFin").onclick=showFinal;
+}
+
+// ── SESSIONE ──────────────────────────────────────────────────
+function startSess(i){ CUR=i; QI=0; SP=0; ANS=false; showQ(); }
+
+function showQ() {
+  ANS=false;
+  var s=SESS[CUR]; var q=s.qs[QI];
+  var pct=Math.round(QI/s.qs.length*100);
+  SC.textContent=s.ic+" "+(QI+1)+"/"+s.qs.length;
+
+  var opts="";
+  q.o.forEach(function(t,i){
+    opts+="<button class='opt' data-qi='"+i+"'><span class='key'>"+LTRS[i]+"</span><span>"+xe(t)+"</span></button>";
+  });
+
+  BD.innerHTML=
+    "<div class='progress'><div class='track'><div class='fill' style='width:"+pct+"%'></div></div>"+
+    "<div class='count'>Domanda <b>"+(QI+1)+"</b> / "+s.qs.length+"</div></div>"+
+    "<div class='qtag'>"+s.ic+" "+xe(s.name)+"</div>"+
+    "<div class='question'>"+xe(q.q)+"</div>"+
+    "<div class='options' id='opts'>"+opts+"</div>"+
+    "<div class='explain' id='ex'><div class='explain-head' id='exh'></div><div id='exb'></div></div>"+
+    "<div class='nav' id='nav'><button class='btn btn-ghost btn-sm' id='btnM'>✕ Menu</button><span style='flex:1'></span></div>";
+
+  document.getElementById("btnM").onclick=showMenu;
+  BD.querySelectorAll(".opt[data-qi]").forEach(function(b){
+    b.onclick=function(){doAnswer(parseInt(b.getAttribute("data-qi")));};
+  });
+}
+
+function doAnswer(i) {
+  if(ANS) return; ANS=true;
+  var s=SESS[CUR]; var q=s.qs[QI];
+  var ok=i===q.ok;
+  if(ok) SP+=s.ppp;
+
+  BD.querySelectorAll(".opt").forEach(function(b,j){
+    b.disabled=true;
+    if(j===q.ok) b.classList.add("correct");
+    else if(j===i) b.classList.add("wrong");
+    else b.classList.add("dim");
+  });
+
+  var ex=document.getElementById("ex");
+  ex.classList.add("show",ok?"ok":"no");
+  document.getElementById("exh").innerHTML=ok
+    ?"✓ Risposta corretta <span class='pts-badge'>+"+s.ppp+" pt</span>"
+    :"✗ Risposta errata";
+  document.getElementById("exb").innerHTML=q.why;
+
+  var last=QI===s.qs.length-1;
+  var nb=document.createElement("button");
+  nb.className="btn btn-primary";
+  nb.textContent=last?"Vedi risultato →":"Prossima domanda →";
+  nb.onclick=function(){if(last)showSessResult();else{QI++;showQ();}};
+  document.getElementById("nav").appendChild(nb);
+  nb.focus();
+}
+
+function showSessResult() {
+  var s=SESS[CUR];
+  var mp=s.ppp*s.qs.length;
+  var pct=Math.round(SP/mp*100);
+  var deg=pct*3.6;
+  var r=226; // ring radius reference for circumference
+  var circ=2*Math.PI*60; // r=60
+
+  DONE[s.id]={pts:SP,mp:mp};
+  var tp=totalPts();
+  sbSave(NICK,tp);
+
+  var rk,rl,msg;
+  if(pct===100){rk="Perfetto! 🏆";rl="hi";msg="Risposta esatta su ogni domanda! Sei un esperto.";}
+  else if(pct>=75){rk="Ottimo! 🎯";rl="hi";msg="Quasi perfetto! Ottima conoscenza dell'argomento.";}
+  else if(pct>=50){rk="Bene 📈";rl="mid";msg="Buona base! Qualche risposta da rivedere.";}
+  else{rk="Da rivedere 📚";rl="lo";msg="Riascolta la sessione e riprova!";}
+
+  SC.textContent="risultato";
+  var allDone=SESS.every(function(s2){return DONE[s2.id];});
+
+  var dashoffset=circ-(circ*pct/100);
+
+  BD.innerHTML=
+    "<div class='result'>"+
+    "<div class='eyebrow' style='text-align:center'>"+s.ic+" "+xe(s.name)+"</div>"+
+    "<div class='ring-wrap'>"+
+    "<svg class='ring-svg' width='150' height='150' viewBox='0 0 150 150'>"+
+    "<circle class='ring-circle' cx='75' cy='75' r='60'/>"+
+    "<circle class='ring-progress' cx='75' cy='75' r='60' stroke-dasharray='"+circ+"' stroke-dashoffset='"+dashoffset+"'/>"+
+    "</svg>"+
+    "<div class='ring-text'>"+SP+"<div class='ring-sub'>/"+mp+"</div></div>"+
+    "</div>"+
+    "<div class='rank "+rl+"'>"+rk+"</div>"+
+    "<p>"+msg+"</p>"+
+    "<div style='padding:10px 14px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:10px;margin-bottom:16px;font-family:Space Mono,monospace;font-size:12px'>"+
+    "<span style='color:var(--muted)'>PUNTEGGIO TOTALE: </span>"+
+    "<span style='color:var(--gold);font-weight:700;font-size:15px'>"+tp+" pt</span>"+
+    (myRank()>0?"<span style='color:var(--muted);margin-left:10px'>· #"+myRank()+" in classifica</span>":"")+
+    "</div>"+
+    "<button class='btn btn-ghost btn-sm' id='br'>↺ Rigioca</button>"+
+    "<button class='btn btn-ghost btn-sm' id='bm'>← Sessioni</button>"+
+    "<button class='btn btn-gold btn-sm' id='bl'>🏆 Classifica</button>"+
+    (allDone?"<button class='btn btn-primary' id='bf'>🌟 Risultato Finale</button>":"")+
+    "</div>";
+
+  document.getElementById("br").onclick=function(){startSess(CUR);};
+  document.getElementById("bm").onclick=showMenu;
+  document.getElementById("bl").onclick=function(){showLB();};
+  if(allDone) document.getElementById("bf").onclick=showFinal;
+}
+
+// ── LEADERBOARD ───────────────────────────────────────────────
+function showLB() {
+  SC.textContent="classifica";
+  renderLB();
+  sbLoad(function(){ renderLB(); });
+}
+
+function renderLB() {
+  var mx=["🥇","🥈","🥉"];
+  var rows="";
+  LB.forEach(function(e,i){
+    rows+="<div class='lb-row"+(e.name===NICK?" me":"")+"'>"+
+      "<span class='lb-pos'>"+(mx[i]||"#"+(i+1))+"</span>"+
+      "<span class='lb-name'>"+xe(e.name)+(e.name===NICK?" (tu)":"")+"</span>"+
+      "<span class='lb-pts'>"+e.pts+" pt</span></div>";
+  });
+
+  BD.innerHTML=
+    "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:14px'>"+
+    "<div><div class='eyebrow'>Summer Meeting 2026</div><div style='font-size:20px;font-weight:700'>🏆 Classifica Globale</div></div>"+
+    "<button class='btn btn-ghost btn-sm' id='bback'>← Menu</button></div>"+
+    (LB.length>0?
+      "<div style='padding:12px 14px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:10px;margin-bottom:16px;font-family:Space Mono,monospace;font-size:11px;color:var(--gold);text-align:center'>"+
+      "🎁 I PRIMI 3 VINCONO UN GADGET APULIANCHAIN · CONSEGNA AL TERMINE DELL'EVENTO</div>":"")+ 
+    (LB.length===0?"<div style='text-align:center;padding:30px;color:var(--muted);font-family:Space Mono,monospace'>Nessun punteggio ancora — inizia a giocare!</div>":"<div class='lb-panel'>"+rows+"</div>")+
+    (myRank()>0?
+      "<div style='padding:10px 14px;background:rgba(45,212,255,.07);border:1px solid rgba(45,212,255,.3);border-radius:10px;margin-bottom:14px;font-family:Space Mono,monospace;font-size:12px;display:flex;justify-content:space-between'>"+
+      "<span style='color:var(--cyan)'>La tua posizione: <b>#"+myRank()+"</b></span>"+
+      "<span style='color:var(--gold);font-weight:700'>"+myPts()+" pt</span></div>":"")+
+    "<button class='btn btn-primary btn-sm' id='bcont'>← Continua a giocare</button>";
+
+  document.getElementById("bback").onclick=showMenu;
+  document.getElementById("bcont").onclick=showMenu;
+}
+
+// ── RISULTATO FINALE ──────────────────────────────────────────
+function showFinal() {
+  var tp=totalPts(), tm=0;
+  SESS.forEach(function(s){if(DONE[s.id])tm+=DONE[s.id].mp;});
+  var pct=Math.round(tp/tm*100);
+  var circ=2*Math.PI*60;
+  var dash=circ-(circ*pct/100);
+  var rk=myRank();
+  var rnk,rl,msg;
+  if(pct>=90){rnk="DeFi Master 🏆";rl="hi";msg="Eccezionale! Hai dominato tutti gli argomenti del Summer Meeting.";}
+  else if(pct>=70){rnk="Web3 Expert 🎯";rl="hi";msg="Ottimo! Conoscenza solida su quasi tutto il programma.";}
+  else if(pct>=50){rnk="Blockchain Explorer 🌐";rl="mid";msg="Buona base! Continua ad approfondire con ApulianChain.";}
+  else{rnk="Curioso in Crescita 🌱";rl="lo";msg="Il viaggio comincia qui. Il Summer Meeting è il tuo punto di partenza!";}
+
+  SC.textContent="risultato finale";
+
+  var recap="<div class='recap'>";
+  SESS.forEach(function(s){
+    var d=DONE[s.id]; if(!d) return;
+    var p=Math.round(d.pts/d.mp*100);
+    recap+="<div class='recap-card "+(p===100?"p":p>=50?"h":"l")+"'>"+
+      "<div class='recap-ic'>"+s.ic+"</div>"+
+      "<div class='recap-score'>"+d.pts+"/"+d.mp+"</div>"+
+      "<div class='recap-name'>"+s.badge+"</div></div>";
+  });
+  recap+="</div>";
+
+  BD.innerHTML=
+    "<div class='result'>"+
+    "<div class='eyebrow' style='text-align:center'>🌟 Summer Meeting 2026 — Risultato Finale</div>"+
+    "<div class='ring-wrap'>"+
+    "<svg class='ring-svg' width='150' height='150' viewBox='0 0 150 150'>"+
+    "<circle class='ring-circle' cx='75' cy='75' r='60'/>"+
+    "<circle class='ring-progress' cx='75' cy='75' r='60' stroke='var(--green)' stroke-dasharray='"+circ+"' stroke-dashoffset='"+dash+"'/>"+
+    "</svg>"+
+    "<div class='ring-text'>"+tp+"<div class='ring-sub'>/"+tm+"</div></div>"+
+    "</div>"+
+    "<div class='rank "+rl+"'>"+rnk+"</div>"+
+    "<p>"+msg+"</p>"+
+    (rk>0&&rk<=3?
+      "<div style='padding:14px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);border-radius:12px;margin-bottom:14px;text-align:center'>"+
+      "<div style='font-size:28px;margin-bottom:6px'>"+["🥇","🥈","🥉"][rk-1]+"</div>"+
+      "<div style='font-weight:700;font-size:16px;color:var(--gold)'>Sei in top 3! Ritira il tuo gadget ApulianChain 🎁</div>"+
+      "<div style='font-family:Space Mono,monospace;font-size:11px;color:var(--muted);margin-top:4px'>Mostra questo schermo allo staff ApulianChain</div></div>":
+      "<div style='padding:10px 14px;background:rgba(45,212,255,.07);border:1px solid rgba(45,212,255,.3);border-radius:10px;margin-bottom:14px;text-align:center;font-family:Space Mono,monospace;font-size:12px;color:var(--cyan)'>"+
+      "La tua posizione: <b>#"+rk+"</b> con <b>"+tp+" pt</b></div>")+
+    recap+
+    "<button class='btn btn-gold btn-sm' id='bfl'>🏆 Classifica</button>"+
+    "<button class='btn btn-ghost btn-sm' id='bfr'>↺ Ricomincia</button>"+
+    "</div>";
+
+  document.getElementById("bfl").onclick=function(){showLB();};
+  document.getElementById("bfr").onclick=function(){DONE={};showMenu();};
+}
+
+// ── QR CODE ───────────────────────────────────────────────────
+function showQR() {
+  SC.textContent="qr code";
+  var url="https://vincenzopapagna04-ops.github.io/summer-meeting/summer-meeting-2026.html";
+  BD.innerHTML=
+    "<div style='text-align:center'>"+
+    "<div class='eyebrow' style='text-align:center'>📱 Scansiona per giocare</div>"+
+    "<h1 style='font-size:22px;margin-bottom:6px'><span class='g1'>Summer</span> <span class='g2'>Meeting 2026</span></h1>"+
+    "<p style='font-family:Space Mono,monospace;font-size:12px;color:var(--muted);margin-bottom:16px'>Inquadra il QR con la fotocamera del tuo smartphone</p>"+
+    "<div class='qr-box'><div id='qr'></div></div>"+
+    "<p style='font-family:Space Mono,monospace;font-size:10px;color:var(--muted);margin:8px 0 16px;word-break:break-all;padding:0 10px'>"+url+"</p>"+
+    "<div style='padding:12px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.3);border-radius:10px;margin-bottom:16px;font-family:Space Mono,monospace;font-size:11px;color:var(--gold)'>"+
+    "🎁 I PRIMI 3 IN CLASSIFICA VINCONO UN GADGET APULIANCHAIN</div>"+
+    "<button class='btn btn-primary btn-sm' id='bqback'>← Gioca ora</button>"+
+    "<button class='btn btn-ghost btn-sm' id='bqlb'>🏆 Classifica</button>"+
+    "</div>";
+
+  document.getElementById("bqback").onclick=showStart;
+  document.getElementById("bqlb").onclick=function(){showLB();};
+
+  setTimeout(function(){
+    var el=document.getElementById("qr"); if(!el) return;
+    try{new QRCode(el,{text:url,width:200,height:200,colorDark:"#070b16",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});}
+    catch(e){el.innerHTML="<div style='width:200px;height:200px;display:flex;align-items:center;justify-content:center;background:#111a2e;border-radius:8px;font-family:Space Mono,monospace;font-size:10px;color:var(--cyan);text-align:center;padding:10px'>Condividi l'URL sopra</div>";}
+  },100);
+}
+
+// ── AVVIO ─────────────────────────────────────────────────────
+sbLoad(function(){ showStart(); });
+</script>
+</body>
+</html>
